@@ -1,0 +1,12 @@
+defaults:
+  - default             
+  - encoder: mlp        
+  - decoder: bart  #bart 
+  - tokenizer: smiles 
+  - _self_              
+
+_target_: src.models.de_novo.nmr_denovo.NMRDeNovoModel
+
+# defaults:
+#   - encoder: mlp   # transformer
+#   - decoder: transformer

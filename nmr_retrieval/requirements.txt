@@ -1,0 +1,8 @@
+lmdb
+myopic_mces
+numpy
+rdkit
+scipy
+torch
+tqdm
+transformers

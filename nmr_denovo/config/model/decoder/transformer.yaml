@@ -1,0 +1,6 @@
+_target_: src.models.de_novo.decoder.SmilesTransformerDecoder
+d_model: 768
+nhead: 8
+num_encoder_layers: 6
+num_decoder_layers: 6
+k_predictions: 10

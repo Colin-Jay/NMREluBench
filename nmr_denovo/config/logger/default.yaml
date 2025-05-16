@@ -1,0 +1,18 @@
+# log frequency
+
+wandb:
+  name: ${expname}
+  project: nmrelubench
+  entity: null
+  log_model: False
+  mode: 'online'
+  group: ${expname}
+  save_dir: ${oc.env:WANDB_DIR}/${expname}
+
+wandb_watch:
+  log: 'all'
+  log_freq: 500
+
+lr_monitor:
+  logging_interval: "step"
+  log_momentum: False

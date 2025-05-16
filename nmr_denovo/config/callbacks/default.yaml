@@ -1,0 +1,11 @@
+monitor_metric: 'val_loss'
+monitor_metric_mode: 'min'
+
+early_stopping:
+  patience: 20
+  verbose: False
+
+model_checkpoints:
+  save_top_k: 10
+  verbose: True
+  save_last: True

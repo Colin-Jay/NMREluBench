@@ -1,0 +1,6 @@
+random_seed: 42
+ckpt_path: null
+test_result_path: null
+log_only_loss_at_stages:
+  - train
+  - val
