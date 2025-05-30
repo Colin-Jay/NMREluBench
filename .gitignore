@@ -30,6 +30,10 @@ MANIFEST
 # custom
 **/hydra/
 **/wandb/
+./nmr_denovo/config/data/qm9_random.yaml
+./nmr_denovo/config/data/nmrshiftdb2_2024_filtered_o.yaml
+./nmr_denovo/config/data/nmrshiftdb2_2024_unfiltered_o.yaml
+./nmr_denovo/config/data/nmrshiftdb2_2024_test.yaml
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
