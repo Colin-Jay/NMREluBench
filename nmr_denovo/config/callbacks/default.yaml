@@ -3,9 +3,9 @@ monitor_metric_mode: 'min'
 
 early_stopping:
   patience: 20
-  verbose: False
+  verbose: True
 
 model_checkpoints:
-  save_top_k: 10
+  save_top_k: 3
   verbose: True
   save_last: True

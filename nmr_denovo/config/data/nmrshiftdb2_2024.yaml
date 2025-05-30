@@ -9,11 +9,11 @@ datamodule:
   num_points: 4000
   use_complete: False
   
-  split_path: /fs_mol/fjxu/Spectra/NMR/database/NMREluBench/QM9-NMR/split_ids.pt
+  split_path: /fs_mol/fjxu/Spectra/NMR/database/NMREluBench/nmrshiftdb2_2024/split_ids.pt
 
   datasets:
     _target_: src.data.nmr_datasets.NMREluBenchDataset
-    db_path: /fs_mol/fjxu/Spectra/NMR/database/NMREluBench/QM9-NMR/all.lmdb
+    db_path: /fs_mol/fjxu/Spectra/NMR/database/NMREluBench/nmrshiftdb2_2024/all.lmdb
     use_h: ${data.datamodule.use_h}
     use_c: ${data.datamodule.use_c} 
     num_points: ${data.datamodule.num_points}

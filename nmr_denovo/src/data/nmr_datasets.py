@@ -64,7 +64,7 @@ def generate_nmr_spectrum(
 
 
 class NMREluBenchDataset(Dataset):
-    def __init__(self, db_path, use_h=False, use_c=True, num_points=4000):
+    def __init__(self, db_path, use_h=False, use_c=True, use_complete=False, num_points=4000):
         assert use_h or use_c, "You must enable at least one of use_h or use_c."
 
         self.dataset = LMDBDataset(db_path)
@@ -87,6 +87,27 @@ class NMREluBenchDataset(Dataset):
 
             if (use_h and not has_h) or (use_c and not has_c) or (smiles is None):
                 continue
+
+            if use_complete:
+                complete_13c = sample.get("complete_13c", None)
+                complete_1h = sample.get("complete_1h", None)
+                if use_c and use_h:
+                    if complete_13c and complete_1h:
+                        pass
+                    else:
+                        continue
+                elif use_c and not use_h:
+                    if complete_13c:
+                        pass
+                    else:
+                        continue
+                elif not use_c and use_h:
+                    if complete_1h:
+                        pass
+                    else:
+                        continue
+                else:
+                    continue
 
             self.filtered_indices.append(idx)
 
@@ -129,4 +150,6 @@ class NMREluBenchDataset(Dataset):
         ret['nmr_13c_spec'] = torch.from_numpy(np.array(c_spectrum)).float()
 
         return ret
+
+
 

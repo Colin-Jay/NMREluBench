@@ -10,6 +10,7 @@ export HYDRA_FULL_ERROR=1
 [ -z "${batch_size}" ] && batch_size=32
 [ -z "${use_h}" ] && use_h=False
 [ -z "${use_c}" ] && use_c=True
+[ -z "${use_complete}" ] && use_complete=False
 
 
 [ -z "${ckpt_path}" ] && ckpt_path=null
@@ -28,6 +29,7 @@ python nmr_run.py expname=$expname \
     data.batch_size=$batch_size  \
     data.datamodule.use_h=$use_h  \
     data.datamodule.use_c=$use_c  \
+    data.datamodule.use_complete=$use_complete \
     model=denovo \
     model.ckpt_path=$ckpt_path \
     model/encoder=$model_encoder \

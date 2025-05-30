@@ -12,6 +12,8 @@ import torch
 from torch.utils.data import random_split
 from omegaconf import DictConfig
 import random
+from torch.utils.data import Subset
+
 # from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, PreTrainedModel
 
 def worker_init_fn(id: int):
@@ -83,10 +85,11 @@ class NMREluBenchDataModule(pl.LightningDataModule):
 
     def __init__(
         self,
-        # split_path: DictConfig,
+        split_path: DictConfig,
         datasets: DictConfig,
         use_h: DictConfig,
         use_c: DictConfig,
+        use_complete: DictConfig,
         num_points: DictConfig,
         num_workers: DictConfig,
         batch_size: DictConfig,
@@ -98,10 +101,11 @@ class NMREluBenchDataModule(pl.LightningDataModule):
                 values. Default is None, in which case the split from the `dataset` is used.
         """
         super().__init__()
-        # self.split_path = split_path
+        self.split_path = split_path
         self.datasets = datasets
         self.use_h = use_h
         self.use_c = use_c
+        self.use_complete = use_complete
         self.num_points = num_points
         self.num_workers = num_workers
         self.batch_size = batch_size
@@ -114,37 +118,21 @@ class NMREluBenchDataModule(pl.LightningDataModule):
     def setup(self, stage: Optional[str] = None):
         """Pre-processing to be executed on every device when using distributed training."""
         self.dataset = hydra.utils.instantiate(self.datasets)
-        # split = torch.load(self.split_path)
-        # train_id = split['train_id']
-        # valid_id = split['valid_id']
-        # test_id = split['test_id']
-        # from torch.utils.data import Subset
-        # self.train_lmdb_dataset = Subset(self.dataset, train_id)
-        # self.val_lmdb_dataset   = Subset(self.dataset, valid_id)
-        # self.test_lmdb_dataset  = Subset(self.dataset, test_id)
+        split = torch.load(self.split_path)
+        train_id = split['train_id']
+        valid_id = split['valid_id']
+        test_id = split['test_id']
+        filtered_indices = self.dataset.filtered_indices
 
-        # self.train_dataset = NMREluBenchDataset(self.train_lmdb_dataset, use_h=self.use_h, use_c=self.use_c, num_points=self.num_points)
-        # self.val_dataset   = NMREluBenchDataset(self.val_lmdb_dataset, use_h=self.use_h, use_c=self.use_c, num_points=self.num_points)
-        # self.test_dataset  = NMREluBenchDataset(self.test_lmdb_dataset, use_h=self.use_h, use_c=self.use_c, num_points=self.num_points)
+        index_map = {idx: i for i, idx in enumerate(filtered_indices)}
 
-        # self.test_dataset = hydra.utils.instantiate(self.datasets.test)
+        train_id = [index_map[i] for i in train_id if i in index_map]
+        valid_id = [index_map[i] for i in valid_id if i in index_map]
+        test_id  = [index_map[i] for i in test_id if i in index_map]
 
-        total_size = len(self.dataset)
-        train_size = int(total_size * 0.9) 
-        val_size = total_size - train_size
-        train_dataset, val_dataset = random_split(self.dataset, [train_size, val_size], generator=torch.Generator().manual_seed(42))
-
-        self.train_lmdb_dataset = train_dataset
-        self.val_dataset = val_dataset
-
-        test_size = val_size-int(0.5*(val_size))
-        val_dataset, test_dataset = random_split(self.val_dataset, [val_size-test_size, test_size], generator=torch.Generator().manual_seed(42))
-        self.val_lmdb_dataset = val_dataset
-        self.test_lmdb_dataset = test_dataset
-
-        self.train_dataset = self.train_lmdb_dataset
-        self.val_dataset   = self.val_lmdb_dataset
-        self.test_dataset  = self.test_lmdb_dataset
+        self.train_dataset = Subset(self.dataset, train_id)
+        self.val_dataset   = Subset(self.dataset, valid_id)
+        self.test_dataset  = Subset(self.dataset, test_id)
 
 
 
@@ -154,7 +142,6 @@ class NMREluBenchDataModule(pl.LightningDataModule):
         print("test_dataset", len(self.test_dataset), (self.test_dataset)[0])
         # self.test_dataset = val_dataset
         # self.val_dataset = hydra.utils.instantiate(self.datasets.test)
-        # from torch.utils.data import Subset
         # self.test_dataset = Subset(self.test_dataset, range(min(64, len(self.test_dataset))))
         # self.test_dataset = self.train_dataset
 
