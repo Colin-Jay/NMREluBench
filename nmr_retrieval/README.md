@@ -1,4 +1,4 @@
-# NMR Retrieval
+# Library matching
 
 This project provides various methods for NMR data retrieval, including Random, Wasserstein, Vector, and CReSS methods.
 
