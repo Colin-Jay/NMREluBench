@@ -64,13 +64,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 This project is built upon the following open-source works, and we deeply appreciate the contributions of their authors:
 
-### 🧠 Dataset & Baseline Methods
+### ✔️ Dataset & Baseline Methods
 - **[NMRNet](https://github.com/Colin-Jay/NMRNet)** - Provided the NMR spectral dataset.  
 
-### 🧠 Core Development Framework
+### ✔️ Core Development Framework
 - **[MassSpecGym](https://github.com/pluskal-lab/MassSpecGym)** - Our code is extended from this mass spectrometry toolkit.  
 
-### 🧠 Model Architecture
+### ✔️ Model Architecture
 - **[CMGNet](https://github.com/WJmodels/CMGNet)** - The BART-based model was adapted from this repository.  
 
 We also thank the broader open-source community for enabling reproducible research.
